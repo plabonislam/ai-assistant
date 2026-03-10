@@ -4,9 +4,9 @@ import { ingestNewsUrls } from "@/lib/ragChat";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const urls = Array.isArray(body?.urls)
-      ? body.urls.filter((value): value is string => typeof value === "string")
-      : [];
+    const urls: string[] = Array.isArray(body?.urls)
+     ? body.urls.filter((value : unknown): value is string => typeof value === "string")
+     : [];
 
     if (urls.length === 0) {
       return NextResponse.json(
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    console.log(("Received URLs for ingestion:", urls));
+    console.log("Received URLs for ingestion:", urls);
     const result = await ingestNewsUrls(urls);
     return NextResponse.json(result);
   } catch (error) {
